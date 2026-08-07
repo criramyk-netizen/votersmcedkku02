@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ขวัญใจสายสุรี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font:'Prompt','Noto Sans Thai',Arial,sans-serif;
+  --bg:#fffaf4;
+  --panel:#ffffff;
+  --panel2:#fff3e4;
+  --ink:#2c231c;
+  --muted:#8a7a6c;
+  --line:#ecd8bd;
+
+  --orange-900:#7a3b0a;
+  --orange-800:#96470c;
+  --orange-700:#b4530f;
+  --orange-600:#d9720e;
+  --orange-500:#e8871f;
+  --orange-400:#f2a649;
+  --orange-100:#fdeedc;
+  --gold:#c98a2c;
+
+  --ok-bg:#eaf6ef;--ok:#2f7d5b;--ok-line:#bfe3cd;
+  --err-bg:#fdeceb;--err:#c0442e;--err-line:#f3c3ba;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--ink);letter-spacing:.1px}
+h1,h2,h3{font-family:var(--font);font-weight:700}
+
+header{position:sticky;top:0;z-index:10;
+  background:linear-gradient(120deg,var(--orange-900) 0%,var(--orange-700) 45%,var(--orange-500) 100%);
+  border-bottom:1px solid var(--orange-900);
+  box-shadow:0 4px 18px rgba(122,59,10,.25)}
+.wrap{max-width:1180px;margin:auto;padding:18px 22px}
+.nav{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;line-height:1.15}
+.brand .eyebrow{font-size:11px;letter-spacing:2.5px;color:var(--orange-100);font-weight:600;opacity:.85}
+.brand .title{font-weight:800;font-size:20px;color:#fff}
+.nav-buttons{display:flex;gap:8px;flex-wrap:wrap}
+
+button{border:0;border-radius:10px;padding:11px 18px;cursor:pointer;font-weight:600;font-family:var(--font);font-size:15px;transition:transform .08s ease,box-shadow .08s ease}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+.nav-btn{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.4)}
+.nav-btn.active{background:#fff;color:var(--orange-800);border:1px solid #fff}
+
+.primary{background:linear-gradient(120deg,var(--orange-700),var(--orange-500));color:#fff;box-shadow:0 6px 16px rgba(217,114,14,.35)}
+.secondary{background:var(--panel2);color:var(--orange-800);border:1px solid var(--line)}
+.danger{background:linear-gradient(120deg,#a83324,#c0442e);color:#fff}
+
+.page{display:none}.page.active{display:block}
+
+.hero{padding:56px 0 34px;text-align:center;position:relative}
+.hero .eyebrow{font-size:13px;letter-spacing:4px;color:var(--gold);font-weight:600;text-transform:uppercase}
+.hero h1{font-size:clamp(34px,6vw,64px);margin:10px 0;
+  background:linear-gradient(100deg,var(--orange-900),var(--orange-600) 55%,var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);font-size:17px;font-weight:400}
+.hero .rule{width:64px;height:3px;margin:18px auto 0;border-radius:3px;
+  background:linear-gradient(90deg,var(--orange-700),var(--gold))}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:10px}
+.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(122,59,10,.08)}
+.card{position:relative}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--orange-700),var(--orange-400),var(--gold));z-index:1}
+.card img{width:100%;height:230px;object-fit:cover;background:var(--orange-100)}
+.no-photo{height:230px;display:grid;place-items:center;color:var(--orange-600);font-size:44px;font-weight:700;background:var(--orange-100)}
+.card-body{padding:18px}
+.mcno{font-size:12px;letter-spacing:1.5px;color:var(--orange-700);font-weight:700;text-transform:uppercase}
+.mcname{font-size:20px;font-weight:700;margin:6px 0 16px;color:var(--ink)}
+.score{font-size:28px;font-weight:800;color:var(--ink)}.score small{font-size:12px;color:var(--muted);font-weight:500}
+.sticker{color:var(--orange-700);margin-top:6px;font-weight:600;font-size:14px}
+.status{text-align:center;color:var(--muted);margin:22px;font-size:14px}
+
+.panel{padding:26px;margin:28px auto;max-width:720px}
+.panel h2{margin-top:0;color:var(--orange-800);font-size:22px}
+.panel .subhead{color:var(--muted);font-size:14px;margin-top:-8px}
+
+label{display:block;margin:14px 0 6px;color:#5b4c3e;font-size:14px;font-weight:600}
+input,select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:16px;font-family:var(--font)}
+input:focus,select:focus{outline:2px solid var(--orange-400);outline-offset:1px;border-color:var(--orange-500)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.amount-box{background:var(--panel2);border:1px dashed var(--orange-400);border-radius:12px;padding:16px;margin-top:10px}
+.amount-box .hint{font-size:13px;color:var(--muted);margin-top:6px}
+
+.result{padding:14px 16px;border-radius:12px;margin-top:16px;display:none;font-size:14.5px;line-height:1.6}
+.result.ok{display:block;background:var(--ok-bg);border:1px solid var(--ok-line);color:#1f5c40}
+.result.err{display:block;background:var(--err-bg);border:1px solid var(--err-line);color:var(--err)}
+
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;font-size:14.5px}
+th{color:var(--orange-700);font-weight:700}
+.small{font-size:13px;color:var(--muted)}
+
+.mc-edit-row td{vertical-align:middle}
+.mc-edit-row input{padding:8px 10px;font-size:14px}
+.mc-edit-row .mcno-cell{font-weight:700;color:var(--orange-700);white-space:nowrap}
+.mc-save-btn{padding:8px 14px;font-size:13.5px}
+
+.section-divider{margin:30px 0 18px;border:0;border-top:1px solid var(--line)}
+
+@media(max-width:650px){.row{grid-template-columns:1fr}.hero{padding-top:30px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <span class="eyebrow">THE AMBER HOUR</span>
+      <span class="title">✦ ขวัญใจสายสุรี</span>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn active" data-page="home" onclick="switchPage('home')">หน้าหลัก</button>
+      <button class="nav-btn" data-page="voter" onclick="switchPage('voter')">ลงคะแนน</button>
+      <button class="nav-btn" data-page="admin" onclick="switchPage('admin')">ผู้ดูแล</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="page-home" class="page active">
+    <div class="hero">
+      <div class="eyebrow">Vote Live</div>
+      <h1>ขวัญใจสายสุรี</h1>
+      <p>ติดตามคะแนนของผู้เข้าแข่งขันแบบเรียลไทม์</p>
+      <div class="rule"></div>
+    </div>
+    <div id="grid" class="grid"></div>
+    <div id="status-text" class="status">กำลังโหลดคะแนน...</div>
+  </section>
+
+  <section id="page-voter" class="page">
+    <div class="panel">
+      <h2>ระบบลงคะแนน</h2>
+      <p class="subhead">ผู้ลงคะแนนต้องเข้าสู่ระบบก่อนทำรายการ</p>
+
+      <div id="voter-login">
+        <label>ชื่อผู้ใช้</label>
+        <input id="voter-user" autocomplete="username">
+        <label>รหัสผ่าน</label>
+        <input id="voter-pass" type="password" autocomplete="current-password">
+        <button class="primary" id="voter-login-btn" style="margin-top:16px" onclick="login('voter')">เข้าสู่ระบบ</button>
+        <div id="voter-login-result" class="result"></div>
+      </div>
+
+      <div id="voter-form" style="display:none">
+        <p>ผู้ใช้งาน: <b id="voter-who"></b> <button class="secondary" onclick="logout()">ออกจากระบบ</button></p>
+
+        <label>เลขคิวผู้โหวต</label>
+        <input id="queue-no" placeholder="เช่น 001">
+
+        <label>เลือกผู้เข้าแข่งขัน</label>
+        <select id="mc-select"></select>
+
+        <label>ยอดซื้อ (บาท)</label>
+        <div class="amount-box">
+          <input id="amount-input" type="number" min="5" step="1" inputmode="numeric" placeholder="พิมพ์จำนวนเงินที่ซื้อ เช่น 150" oninput="updateAmountPreview()">
+          <div class="hint">ขั้นต่ำ 5 บาท • ต่ำกว่า 50 บาท = 1 บาท/แต้ม • ตั้งแต่ 50 บาทขึ้นไป = 0.67 บาท/แต้ม</div>
+        </div>
+
+        <div id="vote-preview" class="result"></div>
+        <button class="primary" id="submit-vote-btn" style="width:100%;margin-top:18px" onclick="submitVote()">ยืนยันการโหวต</button>
+        <div id="vote-result" class="result"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-admin" class="page">
+    <div class="panel" id="admin-login">
+      <h2>เข้าสู่ระบบผู้ดูแล</h2>
+      <label>ชื่อผู้ใช้</label>
+      <input id="admin-user" autocomplete="username">
+      <label>รหัสผ่าน</label>
+      <input id="admin-pass" type="password" autocomplete="current-password">
+      <button class="primary" id="admin-login-btn" style="margin-top:16px" onclick="login('admin')">เข้าสู่ระบบ</button>
+      <div id="admin-login-result" class="result"></div>
+    </div>
+
+    <div id="admin-dashboard" class="panel" style="display:none">
+      <h2>ระบบผู้ดูแล</h2>
+      <p>ผู้ใช้งาน: <b id="admin-who"></b> <button class="secondary" onclick="logout()">ออกจากระบบ</button></p>
+
+      <div id="admin-management" style="display:none">
+        <h3>จัดการผู้ลงคะแนน</h3>
+        <div class="row">
+          <div>
+            <label>Username</label>
+            <input id="new-user">
+          </div>
+          <div>
+            <label>Password</label>
+            <input id="new-pass" type="password">
+          </div>
+        </div>
+        <button class="primary" id="add-voter-btn" style="margin-top:12px" onclick="addVoter()">เพิ่มผู้ลงคะแนน</button>
+        <div id="admin-result" class="result"></div>
+        <div style="overflow:auto">
+          <table>
+            <thead><tr><th>Username</th><th>Role</th><th>Status</th><th>จัดการ</th></tr></thead>
+            <tbody id="voter-table"></tbody>
+          </table>
+        </div>
+
+        <hr class="section-divider">
+
+        <h3>จัดการข้อมูลผู้เข้าแข่งขัน (MC)</h3>
+        <p class="small">แก้ไขชื่อและรูปภาพของผู้เข้าแข่งขัน แล้วกดบันทึกทีละรายการ</p>
+        <div style="overflow:auto">
+          <table>
+            <thead><tr><th>หมายเลข</th><th>ชื่อ</th><th>Photo URL</th><th></th></tr></thead>
+            <tbody id="mc-edit-table"></tbody>
+          </table>
+        </div>
+        <div id="mc-edit-result" class="result"></div>
+      </div>
+
+      <div id="operator-message" class="small" style="display:none">
+        บัญชี Voter-Operator ใช้สำหรับลงคะแนนเท่านั้น
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzbJyXnrfCFkFzg9rpFk85LTOvq2cLPl4ZwRaD54760YGHNh44CeUR-E8MdcZss7R2I/exec";
+const POINTS_PER_STICKER = 5;
+const MIN_AMOUNT = 5;
+const THRESHOLD_AMOUNT = 50;       // ตั้งแต่ยอดนี้ขึ้นไปจะได้อัตราโบนัส
+const STANDARD_BAHT_PER_POINT = 1;    // ต่ำกว่า 50 บาท: 1 บาท = 1 แต้ม
+const BONUS_BAHT_PER_POINT = 0.67;    // ตั้งแต่ 50 บาทขึ้นไป: 0.67 บาท = 1 แต้ม
+const SCOREBOARD_REFRESH_MS = 30000;
+
+let selectedAmount = 0;
+let mcData = [];
+let scoreboardTimer = null;
+
+function token(){ return sessionStorage.getItem('vote_token'); }
+function username(){ return sessionStorage.getItem('admin_user'); }
+function role(){ return sessionStorage.getItem('admin_role'); }
+
+async function apiPost(action, payload={}){
+  const response = await fetch(API_URL, {
+    method:'POST',
+    body:JSON.stringify({action,...payload})
+  });
+  if(!response.ok) throw new Error('HTTP '+response.status);
+  return response.json();
+}
+
+/** ป้องกันการกดปุ่มซ้ำระหว่างรอผลลัพธ์จากเซิร์ฟเวอร์ (double-submit) */
+async function withButtonLock(buttonId, fn){
+  const btn = document.getElementById(buttonId);
+  const originalText = btn ? btn.textContent : null;
+
+  if(btn){
+    btn.disabled = true;
+    btn.textContent = 'กำลังดำเนินการ...';
+  }
+
+  try{
+    return await fn();
+  } finally {
+    if(btn){
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  }
+}
+
+function switchPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const page=document.getElementById('page-'+name);
+  const btn=document.querySelector('.nav-btn[data-page="'+name+'"]');
+  if(page) page.classList.add('active');
+  if(btn) btn.classList.add('active');
+
+  if(name==='home') loadScoreboard();
+  if(name==='voter') prepareVoter();
+  if(name==='admin') prepareAdmin();
+}
+
+async function loadScoreboard(){
+  const grid=document.getElementById('grid');
+  const status=document.getElementById('status-text');
+  status.textContent='กำลังโหลดคะแนน...';
+
+  try{
+    const r=await fetch(API_URL+'?action=getSummary');
+    const result=await r.json();
+    if(!result.success) throw new Error(result.error||'โหลดข้อมูลไม่สำเร็จ');
+
+    mcData=result.data||[];
+    grid.innerHTML=mcData.map((mc,i)=>`
+      <div class="card">
+        ${mc.photoUrl
+          ? `<img src="${escapeAttr(mc.photoUrl)}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="no-photo" style="display:none">MC</div>`
+          : `<div class="no-photo">MC</div>`}
+        <div class="card-body">
+          <div class="mcno">${escapeHtml(mc.mcNumber)}</div>
+          <div class="mcname">${escapeHtml(mc.mcName)}</div>
+          <div class="score">${Number(mc.totalPoints).toLocaleString()} <small>คะแนน</small></div>
+          <div class="sticker">● ${Number(mc.totalStickers).toLocaleString()} สติ๊กเกอร์</div>
+        </div>
+      </div>`).join('');
+
+    status.textContent='อัปเดตล่าสุด '+new Date(result.updatedAt).toLocaleString('th-TH');
+
+    // ถ้าอยู่หน้าผู้ดูแลและมีสิทธิ์ SuperAdmin ให้รีเฟรชตารางแก้ไข MC ด้วยข้อมูลล่าสุด
+    if(document.getElementById('page-admin').classList.contains('active') && role()==='SuperAdmin'){
+      renderMcEditTable();
+    }
+  }catch(e){
+    status.textContent='โหลดข้อมูลไม่สำเร็จ: '+e.message;
+  }
+}
+
+function prepareVoter(){
+  if(token()){
+    document.getElementById('voter-login').style.display='none';
+    document.getElementById('voter-form').style.display='block';
+    document.getElementById('voter-who').textContent=username();
+    fillMcSelect();
+    resetAmountInput();
+  }else{
+    document.getElementById('voter-login').style.display='block';
+    document.getElementById('voter-form').style.display='none';
+  }
+}
+
+function fillMcSelect(){
+  const select=document.getElementById('mc-select');
+  select.innerHTML=mcData.map(mc=>`<option value="${escapeAttr(mc.mcNumber)}">${escapeHtml(mc.mcNumber)} - ${escapeHtml(mc.mcName)}</option>`).join('');
+}
+
+function resetAmountInput(){
+  selectedAmount=0;
+  const input=document.getElementById('amount-input');
+  if(input) input.value='';
+  const preview=document.getElementById('vote-preview');
+  if(preview) preview.style.display='none';
+}
+
+/** คำนวณแต้มตามอัตรา: ต่ำกว่า 50 บาท = 1 บาท/แต้ม, ตั้งแต่ 50 บาทขึ้นไป = 0.67 บาท/แต้ม (ปัดเศษแต้มเป็นจำนวนเต็ม) */
+function calcPoints(amount){
+  if(amount < THRESHOLD_AMOUNT){
+    return Math.round(amount / STANDARD_BAHT_PER_POINT);
+  }
+  return Math.round(amount / BONUS_BAHT_PER_POINT);
+}
+
+function updateAmountPreview(){
+  const input=document.getElementById('amount-input');
+  const box=document.getElementById('vote-preview');
+  const raw=input.value.trim();
+  const amount=Number(raw);
+
+  if(!raw || !Number.isInteger(amount) || amount < MIN_AMOUNT){
+    selectedAmount=0;
+    box.style.display='none';
+    return;
+  }
+
+  selectedAmount=amount;
+  const total=calcPoints(amount);
+  const stickers=Math.floor(total/POINTS_PER_STICKER);
+  const isBonus=amount>=THRESHOLD_AMOUNT;
+
+  box.className='result ok';
+  box.innerHTML=`ซื้อ <b>${amount.toLocaleString()}</b> บาท ${isBonus?'(อัตราโบนัส 0.67 บาท/แต้ม)':'(อัตราปกติ 1 บาท/แต้ม)'} → รวม <b>${total.toLocaleString()}</b> แต้ม → <b>${stickers.toLocaleString()}</b> สติ๊กเกอร์`;
+}
+
+async function submitVote(){
+  const queue=document.getElementById('queue-no').value.trim();
+  const mc=document.getElementById('mc-select').value;
+  const resultBox=document.getElementById('vote-result');
+
+  if(!queue || !selectedAmount){
+    showResult(resultBox,false,'กรุณากรอกเลขคิวและจำนวนเงินที่ซื้อ');
+    return;
+  }
+
+  await withButtonLock('submit-vote-btn', async ()=>{
+    try{
+      const result=await apiPost('submitVote',{
+        token:token(),
+        voterQueueNo:queue,
+        mcNumber:mc,
+        amount:selectedAmount
+      });
+
+      if(!result.success){
+        if(result.error.includes('เข้าสู่ระบบ')) logout();
+        showResult(resultBox,false,result.error);
+        return;
+      }
+
+      showResult(resultBox,true,
+        `บันทึกสำเร็จ! เลขรายการ <b>${escapeHtml(result.voteId)}</b><br>
+         ${escapeHtml(result.mcNumber)} ได้เพิ่ม ${Number(result.totalPoints).toLocaleString()} คะแนน`
+      );
+
+      document.getElementById('queue-no').value='';
+      resetAmountInput();
+      loadScoreboard();
+    }catch(e){
+      showResult(resultBox,false,'เชื่อมต่อระบบไม่สำเร็จ: '+e.message);
+    }
+  });
+}
+
+async function login(type){
+  const user=document.getElementById(type==='admin'?'admin-user':'voter-user').value.trim();
+  const pass=document.getElementById(type==='admin'?'admin-pass':'voter-pass').value;
+  const box=document.getElementById(type==='admin'?'admin-login-result':'voter-login-result');
+  const btnId=type==='admin'?'admin-login-btn':'voter-login-btn';
+
+  if(!user || !pass){
+    showResult(box,false,'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+    return;
+  }
+
+  await withButtonLock(btnId, async ()=>{
+    try{
+      const result=await apiPost('login',{username:user,password:pass});
+      if(!result.success){
+        showResult(box,false,result.error);
+        return;
+      }
+
+      sessionStorage.setItem('vote_token',result.token);
+      sessionStorage.setItem('admin_user',result.username);
+      sessionStorage.setItem('admin_role',result.role);
+
+      if(type==='voter'){
+        prepareVoter();
+      }else{
+        prepareAdmin();
+      }
+    }catch(e){
+      showResult(box,false,'ไม่สามารถเชื่อมต่อระบบได้: '+e.message);
+    }
+  });
+}
+
+async function logout(){
+  const t=token();
+  try{ if(t) await apiPost('logout',{token:t}); }catch(e){}
+  sessionStorage.clear();
+  prepareVoter();
+  prepareAdmin();
+}
+
+function prepareAdmin(){
+  const logged=!!token();
+  document.getElementById('admin-login').style.display=logged?'none':'block';
+  document.getElementById('admin-dashboard').style.display=logged?'block':'none';
+  if(!logged) return;
+
+  document.getElementById('admin-who').textContent=username()+' ('+role()+')';
+
+  const isSuper=role()==='SuperAdmin';
+  document.getElementById('admin-management').style.display=isSuper?'block':'none';
+  document.getElementById('operator-message').style.display=isSuper?'none':'block';
+
+  if(isSuper){
+    loadVoters();
+    renderMcEditTable();
+  }
+}
+
+async function loadVoters(){
+  const tbody=document.getElementById('voter-table');
+  try{
+    const result=await apiPost('listVoters',{token:token()});
+    if(!result.success){
+      tbody.innerHTML='<tr><td colspan="4">'+escapeHtml(result.error)+'</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML=(result.data||[]).map(u=>`
+      <tr>
+        <td>${escapeHtml(u.username)}</td>
+        <td>${escapeHtml(u.role)}</td>
+        <td>${escapeHtml(u.status)}</td>
+        <td>${u.username!=='admin' && u.status==='Active'
+          ? `<button class="danger" onclick="removeVoter('${escapeAttr(u.username)}')">ระงับ</button>`
+          : '-'}</td>
+      </tr>`).join('');
+  }catch(e){
+    tbody.innerHTML='<tr><td colspan="4">โหลดข้อมูลไม่สำเร็จ</td></tr>';
+  }
+}
+
+async function addVoter(){
+  const user=document.getElementById('new-user').value.trim();
+  const pass=document.getElementById('new-pass').value;
+  const box=document.getElementById('admin-result');
+
+  if(!user || !pass){
+    showResult(box,false,'กรุณากรอก Username และ Password');
+    return;
+  }
+
+  await withButtonLock('add-voter-btn', async ()=>{
+    try{
+      const result=await apiPost('addVoter',{
+        token:token(),
+        username:user,
+        password:pass,
+        role:'Voter-Operator'
+      });
+
+      showResult(box,result.success,result.success?'เพิ่มผู้ลงคะแนนสำเร็จ':result.error);
+      if(result.success){
+        document.getElementById('new-user').value='';
+        document.getElementById('new-pass').value='';
+        loadVoters();
+      }
+    }catch(e){
+      showResult(box,false,'เชื่อมต่อระบบไม่สำเร็จ');
+    }
+  });
+}
+
+async function removeVoter(user){
+  if(!confirm('ต้องการระงับผู้ใช้งาน '+user+' ใช่หรือไม่?')) return;
+
+  try{
+    const result=await apiPost('removeVoter',{token:token(),username:user});
+    if(!result.success){ alert(result.error); return; }
+    loadVoters();
+  }catch(e){
+    alert('เชื่อมต่อระบบไม่สำเร็จ');
+  }
+}
+
+/* ===================== MC MANAGEMENT (admin) ===================== */
+
+function renderMcEditTable(){
+  const tbody=document.getElementById('mc-edit-table');
+  if(!tbody) return;
+
+  tbody.innerHTML=mcData.map(mc=>{
+    const rowId=escapeAttr(mc.mcNumber);
+    return `
+      <tr class="mc-edit-row">
+        <td class="mcno-cell">${escapeHtml(mc.mcNumber)}</td>
+        <td><input id="mc-name-${rowId}" value="${escapeAttr(mc.mcName)}"></td>
+        <td><input id="mc-photo-${rowId}" value="${escapeAttr(mc.photoUrl)}" placeholder="https://..."></td>
+        <td><button class="primary mc-save-btn" id="mc-save-btn-${rowId}" onclick="saveMc('${rowId}')">บันทึก</button></td>
+      </tr>`;
+  }).join('');
+}
+
+async function saveMc(mcNumber){
+  const nameInput=document.getElementById('mc-name-'+mcNumber);
+  const photoInput=document.getElementById('mc-photo-'+mcNumber);
+  const box=document.getElementById('mc-edit-result');
+  const btnId='mc-save-btn-'+mcNumber;
+
+  const mcName=nameInput.value.trim();
+  if(!mcName){
+    showResult(box,false,'กรุณากรอกชื่อผู้เข้าแข่งขัน');
+    return;
+  }
+
+  await withButtonLock(btnId, async ()=>{
+    try{
+      const result=await apiPost('updateMc',{
+        token:token(),
+        mcNumber,
+        mcName,
+        photoUrl:photoInput.value.trim()
+      });
+
+      if(!result.success){
+        showResult(box,false,result.error);
+        return;
+      }
+
+      showResult(box,true,'บันทึกข้อมูล '+escapeHtml(mcNumber)+' สำเร็จ');
+      loadScoreboard();
+    }catch(e){
+      showResult(box,false,'เชื่อมต่อระบบไม่สำเร็จ');
+    }
+  });
+}
+
+function showResult(el,ok,msg){
+  el.className='result '+(ok?'ok':'err');
+  el.style.display='block';
+  el.innerHTML=msg;
+}
+
+function escapeHtml(value){
+  return String(value??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+function escapeAttr(value){ return escapeHtml(value); }
+
+/** เริ่ม/หยุด auto-refresh ตามสถานะการมองเห็นแท็บ เพื่อไม่ยิง request เปล่าเวลาไม่ได้เปิดดูอยู่ */
+function startScoreboardAutoRefresh(){
+  stopScoreboardAutoRefresh();
+  scoreboardTimer = setInterval(()=>{
+    if(document.getElementById('page-home').classList.contains('active')){
+      loadScoreboard();
+    }
+  }, SCOREBOARD_REFRESH_MS);
+}
+function stopScoreboardAutoRefresh(){
+  if(scoreboardTimer){ clearInterval(scoreboardTimer); scoreboardTimer=null; }
+}
+
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden){ stopScoreboardAutoRefresh(); }
+  else { loadScoreboard(); startScoreboardAutoRefresh(); }
+});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  loadScoreboard();
+  prepareVoter();
+  prepareAdmin();
+  startScoreboardAutoRefresh();
+});
+</script>
+</body>
+</html>
