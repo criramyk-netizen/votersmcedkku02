@@ -577,6 +577,9 @@ function renderMcEditTable(){
   const tbody=document.getElementById('mc-edit-table');
   if(!tbody) return;
 
+  // ถ้ากำลังพิมพ์แก้ไขอยู่ในตารางนี้ ข้ามการรีเฟรชรอบนี้ไปก่อน กันข้อมูลที่พิมพ์ค้างหาย
+  if(tbody.contains(document.activeElement)) return;
+
   tbody.innerHTML=mcData.map(mc=>{
     const rowId=escapeAttr(mc.mcNumber);
     return `
@@ -638,8 +641,14 @@ function escapeAttr(value){ return escapeHtml(value); }
 function startScoreboardAutoRefresh(){
   stopScoreboardAutoRefresh();
   scoreboardTimer = setInterval(()=>{
-    if(document.getElementById('page-home').classList.contains('active')){
-      loadScoreboard();
+    const onHome=document.getElementById('page-home').classList.contains('active');
+    const onAdmin=document.getElementById('page-admin').classList.contains('active');
+
+    if(onHome || onAdmin){
+      loadScoreboard(); // ฝั่งแอดมินจะรีเฟรชตาราง MC ต่อเองถ้าเป็น SuperAdmin (ดูใน loadScoreboard)
+    }
+    if(onAdmin && role()==='SuperAdmin'){
+      loadVoters();
     }
   }, SCOREBOARD_REFRESH_MS);
 }
