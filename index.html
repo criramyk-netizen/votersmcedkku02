@@ -213,6 +213,13 @@ th{color:var(--orange-700);font-weight:700}
 
         <hr class="section-divider">
 
+        <h3>สำรองข้อมูล</h3>
+        <p class="small">ระบบสำรองข้อมูลทั้งไฟล์ให้อัตโนมัติทุกวันเวลา 03:00 น. หรือกดสำรองด้วยตนเองได้ทันที</p>
+        <button class="secondary" id="backup-btn" onclick="backupNow()">สำรองข้อมูลทันที</button>
+        <div id="backup-result" class="result"></div>
+
+        <hr class="section-divider">
+
         <h3>จัดการข้อมูลผู้เข้าแข่งขัน (MC)</h3>
         <p class="small">แก้ไขชื่อและรูปภาพของผู้เข้าแข่งขัน แล้วกดบันทึกทีละรายการ</p>
         <div style="overflow:auto">
@@ -232,7 +239,7 @@ th{color:var(--orange-700);font-weight:700}
 </main>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyTTk-JIQ81dnfL_gTWmncnwa-_2Pr672wspwB4z1_Vku3y07zu3zhjhKIMjZVZ6zB0lA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzbJyXnrfCFkFzg9rpFk85LTOvq2cLPl4ZwRaD54760YGHNh44CeUR-E8MdcZss7R2I/exec";
 const POINTS_PER_STICKER = 5;
 const MIN_AMOUNT = 5;
 const THRESHOLD_AMOUNT = 50;       // ตั้งแต่ยอดนี้ขึ้นไปจะได้อัตราโบนัส
@@ -543,6 +550,25 @@ async function removeVoter(user){
   }catch(e){
     alert('เชื่อมต่อระบบไม่สำเร็จ');
   }
+}
+
+/* ===================== BACKUP ===================== */
+
+async function backupNow(){
+  const box=document.getElementById('backup-result');
+
+  await withButtonLock('backup-btn', async ()=>{
+    try{
+      const result=await apiPost('backupNow',{token:token()});
+      if(!result.success){
+        showResult(box,false,result.error);
+        return;
+      }
+      showResult(box,true,'สำรองข้อมูลสำเร็จ: '+escapeHtml(result.fileName));
+    }catch(e){
+      showResult(box,false,'เชื่อมต่อระบบไม่สำเร็จ');
+    }
+  });
 }
 
 /* ===================== MC MANAGEMENT (admin) ===================== */
